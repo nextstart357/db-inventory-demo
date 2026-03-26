@@ -123,12 +123,12 @@ IF %ERRORLEVEL% EQU 0 GOTO DB_EXISTS
 GOTO DB_NOT_EXISTS
 
 :DB_EXISTS
-echo [INFO] Database '%DB_NAME%' sudah ada.
+echo [INFO] Database '%DB_NAME%' already exists.
 echo.
-set /p ANSWER="Apakah ingin di-drop database? Semua data akan hilang. (Y/N): "
+set /p ANSWER="Drop the database? All data will be lost. (Y/N): "
 IF /I "!ANSWER!" == "Y" GOTO DROP_DATABASE
 echo.
-echo [INFO] Skip drop database. Melanjutkan ke schema...
+echo [INFO] Skip drop database. Proceeding to schema...
 echo.
 GOTO RUN_SCHEMA
 
@@ -139,7 +139,7 @@ psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "SELECT pg_terminate_
 echo [INFO] Dropping database '%DB_NAME%'...
 psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "DROP DATABASE %DB_NAME%;"
 IF %ERRORLEVEL% NEQ 0 GOTO DROP_FAILED
-echo [OK] Database '%DB_NAME%' berhasil di-drop.
+echo [OK] Database '%DB_NAME%' dropped successfully.
 echo.
 GOTO CREATE_DATABASE
 
@@ -150,7 +150,7 @@ pause
 exit /b 1
 
 :DB_NOT_EXISTS
-echo [INFO] Database '%DB_NAME%' belum ada.
+echo [INFO] Database '%DB_NAME%' does not exist.
 echo.
 
 :CREATE_DATABASE
@@ -158,7 +158,7 @@ echo [INFO] Creating database '%DB_NAME%'...
 psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "CREATE DATABASE %DB_NAME%;"
 IF %ERRORLEVEL% NEQ 0 GOTO CREATE_FAILED
 psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "COMMENT ON DATABASE %DB_NAME% IS 'Mini Inventory Database';"
-echo [OK] Database '%DB_NAME%' berhasil dibuat.
+echo [OK] Database '%DB_NAME%' created successfully.
 echo.
 GOTO RUN_SCHEMA
 

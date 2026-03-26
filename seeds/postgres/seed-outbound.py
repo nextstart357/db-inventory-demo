@@ -3,9 +3,9 @@
 Stock Outbound Transaction Generator for Mini Inventory Database (PostgreSQL)
 
 Generates and executes deterministic INSERT statements for stock_outbound and
-stock_outbound_item tables langsung ke database. Koneksi dikonfigurasi melalui
-file .env di direktori yang sama. All UUIDs are deterministic (uuid5) sehingga
-output selalu identik jika parameter sama.
+stock_outbound_item tables directly to the database. Connection is configured via
+.env file in the same directory. All UUIDs are deterministic (uuid5) so the
+output is always identical for the same parameters.
 
 Usage:
     python seed-outbound.py --periode=2026-01 --samples=1000 --item-max=5
@@ -14,7 +14,7 @@ Usage:
     python seed-outbound.py --periode=2026-01 --samples=200 --daily-min=5 --item-max=3
     python seed-outbound.py --periode=2026-01 --samples=100 -o backup-outbound.sql
 
-Output bersifat deterministik: parameter yang sama selalu menghasilkan output identik.
+Output is deterministic: the same parameters always produce identical output.
 """
 
 import argparse
@@ -55,7 +55,7 @@ NS_OUTBOUND_ITEM  = uuid.UUID('f4000000-0000-4000-8000-000000000000')
 # =============================================================================
 
 def load_env():
-    """Load .env file dari direktori yang sama dengan script."""
+    """Load .env file from the same directory as the script."""
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
     env = {}
     if not os.path.exists(env_path):
@@ -71,16 +71,13 @@ def load_env():
     return env
 
 
-def get_db_connection(env):
-    """Buat koneksi PostgreSQL dari konfigurasi env."""
-    try:
-        import psycopg2
-    except ImportError:
-        print("[ERROR] Package psycopg2 belum ter-install.", file=sys.stderr)
-        print("  Install dengan: pip install psycopg2-binary", file=sys.stderr)
-        sys.exit(1)
+_pg8000_mode = False
 
-    return psycopg2.connect(
+
+def get_db_connection(env):
+    """Create PostgreSQL connection from env configuration."""
+    global _pg8000_mode
+    conn_params = dict(
         host=env.get('DB_HOST', '127.0.0.1'),
         port=int(env.get('DB_PORT', '5432')),
         user=env.get('DB_USER', 'postgres'),
@@ -88,9 +85,38 @@ def get_db_connection(env):
         dbname=env.get('DB_NAME', 'dbinv'),
     )
 
+    # Try psycopg2 first, then psycopg v3, then pg8000 (pure Python)
+    try:
+        import psycopg2
+        return psycopg2.connect(**conn_params)
+    except ImportError:
+        pass
+
+    try:
+        import psycopg
+        return psycopg.connect(**conn_params)
+    except ImportError:
+        pass
+
+    try:
+        import pg8000
+        _pg8000_mode = True
+        params = conn_params.copy()
+        params['database'] = params.pop('dbname')
+        return pg8000.connect(**params)
+    except ImportError:
+        pass
+
+    print("[ERROR] No PostgreSQL driver found.", file=sys.stderr)
+    print("  Install one of:", file=sys.stderr)
+    print("    pip install psycopg2-binary   (x64)", file=sys.stderr)
+    print("    pip install psycopg[binary]   (x64 with bundled libpq)", file=sys.stderr)
+    print("    pip install pg8000            (pure Python, any platform)", file=sys.stderr)
+    sys.exit(1)
+
 
 def lookup_products(conn, product_codes):
-    """Query detail product dari database berdasarkan product_code."""
+    """Query product details from database by product_code."""
     cur = conn.cursor()
     placeholders = ','.join(['%s'] * len(product_codes))
     cur.execute(
@@ -105,7 +131,7 @@ def lookup_products(conn, product_codes):
     found_codes = {r[1] for r in rows}
     missing = [c for c in product_codes if c not in found_codes]
     if missing:
-        print(f"[ERROR] Product code tidak ditemukan di database: {', '.join(missing)}", file=sys.stderr)
+        print(f"[ERROR] Product code not found in database: {', '.join(missing)}", file=sys.stderr)
         sys.exit(1)
 
     return [{
@@ -160,15 +186,15 @@ def parse_periode(s):
     """Parse YYYY-MM string, return (year, month)."""
     parts = s.split('-')
     if len(parts) != 2:
-        raise ValueError(f"Format periode harus YYYY-MM, diterima: '{s}'")
+        raise ValueError(f"Period format must be YYYY-MM, received: '{s}'")
     return int(parts[0]), int(parts[1])
 
 
 def build_date_schedule(rng, days_in_month, total_samples, daily_min=None):
-    """Buat jadwal tanggal untuk seluruh transaksi.
+    """Build date schedule for all transactions.
 
-    Jika daily_min diberikan, setiap hari dijamin memiliki minimal N transaksi.
-    Sisa transaksi didistribusikan secara random. Hasil diurutkan kronologis.
+    If daily_min is provided, each day is guaranteed to have at least N transactions.
+    Remaining transactions are distributed randomly. Results are sorted chronologically.
     """
     if daily_min:
         schedule = []
@@ -192,7 +218,7 @@ def generate(args, output, fixed_products=None):
     days_in_month = calendar.monthrange(year, month)[1]
 
     # Deterministic random seed (same params = same output)
-    # Offset +50 agar sequence random berbeda dari seed-inbound.py
+    # Offset +50 so the random sequence differs from seed-inbound.py
     rng_seed = year * 100 + month + 50
     rng = random.Random(rng_seed)
 
@@ -227,7 +253,7 @@ def generate(args, output, fixed_products=None):
     # --- Cleanup previously generated data for this period ---
     prefix = f"OUT/{period_tag}/"
     output.write(
-        f"-- Hapus data generated sebelumnya untuk periode ini\n"
+        f"-- Delete previously generated data for this period\n"
         f"DELETE FROM stock_outbound_item WHERE stock_outbound_id IN (\n"
         f"    SELECT stock_outbound_id FROM stock_outbound\n"
         f"    WHERE outbound_number LIKE '{prefix}%'\n"
@@ -331,7 +357,7 @@ def generate(args, output, fixed_products=None):
         f"-- ============================================================================\n"
         f"-- SUMMARY\n"
         f"-- ============================================================================\n"
-        f"-- Total transaksi : {total_trx}\n"
+        f"-- Total transactions: {total_trx}\n"
         f"-- Total line items: {total_items_all}\n"
         f"-- Periode         : {period_tag}\n"
         f"-- ============================================================================\n"
@@ -349,23 +375,23 @@ def main():
         description='Generate stock outbound seed data (PostgreSQL)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
-            'Contoh:\n'
+            'Examples:\n'
             '  python seed-outbound.py --periode=2026-01 --samples=1000 --item-max=5\n'
             '  python seed-outbound.py --periode=2026-01 --samples=100 --product=PRD-0002,PRD-0003,PRD-0004\n'
             '  python seed-outbound.py --periode=2026-01 --daily-min=3\n'
             '  python seed-outbound.py --periode=2026-01 --samples=200 --daily-min=5 --item-max=3\n'
             '  python seed-outbound.py --periode=2026-01 --samples=100 -o backup-outbound.sql\n'
             '\n'
-            'Output bersifat deterministik: parameter yang sama selalu menghasilkan output identik.\n'
-            'Koneksi database dikonfigurasi melalui file .env di direktori yang sama.\n'
+            'Output is deterministic: the same parameters always produce identical output.\n'
+            'Database connection is configured via .env file in the same directory.\n'
         )
     )
-    parser.add_argument('--periode',    required=True, help='Periode transaksi format YYYY-MM (contoh: 2026-01)')
-    parser.add_argument('--samples',    type=int, default=None, help='Jumlah transaksi outbound (default: 100, atau otomatis jika --daily-min)')
-    parser.add_argument('--item-max',   type=int, default=5, help='Maksimal item per transaksi, range 1..N (default: 5)')
-    parser.add_argument('--product',    default=None, help='Daftar product_code dipisah koma (contoh: PRD-0002,PRD-0003,PRD-0004). Jika diisi, --item-max diabaikan')
-    parser.add_argument('--daily-min',  type=int, default=None, dest='daily_min', help='Minimal transaksi per hari. Jika --samples tidak diberikan, total = days × daily-min')
-    parser.add_argument('-o', '--output', default=None, help='Simpan SQL ke file (selain eksekusi ke database)')
+    parser.add_argument('--periode',    required=True, help='Transaction period in YYYY-MM format (e.g. 2026-01)')
+    parser.add_argument('--samples',    type=int, default=None, help='Number of outbound transactions (default: 100, or auto if --daily-min)')
+    parser.add_argument('--item-max',   type=int, default=5, help='Max items per transaction, range 1..N (default: 5)')
+    parser.add_argument('--product',    default=None, help='Comma-separated product_code list (e.g. PRD-0002,PRD-0003,PRD-0004). If set, --item-max is ignored')
+    parser.add_argument('--daily-min',  type=int, default=None, dest='daily_min', help='Minimum transactions per day. If --samples not given, total = days x daily-min')
+    parser.add_argument('-o', '--output', default=None, help='Save SQL to file (in addition to database execution)')
 
     args = parser.parse_args()
 
@@ -379,14 +405,14 @@ def main():
 
     if args.daily_min:
         if args.daily_min < 1:
-            parser.error('--daily-min harus >= 1')
+            parser.error('--daily-min must be >= 1')
         min_required = days_in_month * args.daily_min
         if args.samples is None:
             args.samples = min_required
         elif args.samples < min_required:
             parser.error(
-                f'--samples ({args.samples}) harus >= days × daily-min '
-                f'({days_in_month} × {args.daily_min} = {min_required})'
+                f'--samples ({args.samples}) must be >= days x daily-min '
+                f'({days_in_month} x {args.daily_min} = {min_required})'
             )
     else:
         if args.samples is None:
@@ -394,40 +420,48 @@ def main():
 
     # Validation
     if args.samples < 1:
-        parser.error('--samples harus >= 1')
+        parser.error('--samples must be >= 1')
     if not args.product:
         if args.item_max < 1:
-            parser.error('--item-max harus >= 1')
+            parser.error('--item-max must be >= 1')
         if args.item_max > TOTAL_PRODUCTS:
-            parser.error(f'--item-max tidak boleh melebihi jumlah produk ({TOTAL_PRODUCTS})')
+            parser.error(f'--item-max must not exceed total products ({TOTAL_PRODUCTS})')
 
     # --- Database connection ---
     env = load_env()
     conn = get_db_connection(env)
     db_name = env.get('DB_NAME', 'dbinv')
 
-    # --- Lookup fixed products (jika --product diberikan) ---
+    # --- Lookup fixed products (if --product is provided) ---
     fixed_products = None
     if args.product:
         codes = [c.strip() for c in args.product.split(',')]
         if not codes:
-            parser.error('--product tidak boleh kosong')
+            parser.error('--product must not be empty')
         fixed_products = lookup_products(conn, codes)
 
-    # --- Generate SQL ke buffer ---
+    # --- Generate SQL to buffer ---
     buf = io.StringIO()
     total_trx, total_items = generate(args, buf, fixed_products)
     sql = buf.getvalue()
     buf.close()
 
-    # --- Simpan ke file jika -o diberikan ---
+    # --- Save to file if -o is provided ---
     if args.output:
         with open(args.output, 'w', encoding='utf-8') as f:
             f.write(sql)
 
-    # --- Eksekusi ke database ---
+    # --- Execute to database ---
     cur = conn.cursor()
-    cur.execute(sql)
+    if _pg8000_mode:
+        # pg8000 only supports single-statement per execute()
+        for stmt in sql.split(';\n'):
+            stmt = stmt.strip()
+            has_sql = any(l.strip() and not l.strip().startswith('--') for l in stmt.splitlines())
+            if has_sql:
+                cur.execute(stmt)
+    else:
+        cur.execute(sql)
     conn.commit()
     cur.close()
     conn.close()
