@@ -2,10 +2,11 @@
 REM ============================================================================
 REM MINI INVENTORY DATABASE SCHEMA INITIALIZATION
 REM ============================================================================
-REM Version: 1.0
+REM Version: 2.0
 REM Created: 2025-12-10
-REM Description: Drop and create mini inventory schema and tables ONLY
-REM              (Does NOT load seed data - use mini-inventory-seed-init.bat)
+REM Updated: 2026-03-26
+REM Description: Check/create database and initialize schema tables
+REM              Single entry point - handles database creation and schema setup
 REM Platform: Windows
 REM Prerequisites: PostgreSQL client (psql) must be installed and in PATH
 REM ============================================================================
@@ -37,7 +38,7 @@ REM Display Configuration
 REM ----------------------------------------------------------------------------
 echo.
 echo ============================================================================
-echo MINI INVENTORY SCHEMA INITIALIZATION (Schema Only)
+echo MINI INVENTORY SCHEMA INITIALIZATION (Database + Schema)
 echo ============================================================================
 echo.
 echo Database Configuration:
@@ -92,31 +93,87 @@ REM ----------------------------------------------------------------------------
 SET PGPASSWORD=%DB_PASSWORD%
 
 REM ----------------------------------------------------------------------------
-REM Step 1: Test Database Connection
+REM Step 1: Test PostgreSQL Server Connection
 REM ----------------------------------------------------------------------------
-echo [STEP 1/2] Testing database connection...
-psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d %DB_NAME% -c "SELECT version();" >nul 2>nul
-IF %ERRORLEVEL% NEQ 0 GOTO DB_CONNECTION_FAILED
-echo [OK] Database connection successful.
+echo [STEP 1/3] Testing PostgreSQL server connection...
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "SELECT version();" >nul 2>nul
+IF %ERRORLEVEL% NEQ 0 GOTO SERVER_CONNECTION_FAILED
+echo [OK] PostgreSQL server connection successful.
 echo.
-GOTO DB_CONNECTION_OK
+GOTO SERVER_CONNECTION_OK
 
-:DB_CONNECTION_FAILED
-echo [ERROR] Cannot connect to database.
+:SERVER_CONNECTION_FAILED
+echo [ERROR] Cannot connect to PostgreSQL server.
 echo Please verify:
 echo   - PostgreSQL server is running
-echo   - Database '%DB_NAME%' exists
 echo   - Credentials are correct
 echo   - Host %DB_HOST%:%DB_PORT% is reachable
 pause
 exit /b 1
 
-:DB_CONNECTION_OK
+:SERVER_CONNECTION_OK
 
 REM ----------------------------------------------------------------------------
-REM Step 2: Execute Schema (Drop and Create Tables)
+REM Step 2: Check & Manage Database
 REM ----------------------------------------------------------------------------
-echo [STEP 2/2] Executing schema script (drop and create tables)...
+echo [STEP 2/3] Checking database '%DB_NAME%'...
+
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '%DB_NAME%'" 2>nul | findstr /C:"1" >nul 2>nul
+IF %ERRORLEVEL% EQU 0 GOTO DB_EXISTS
+GOTO DB_NOT_EXISTS
+
+:DB_EXISTS
+echo [INFO] Database '%DB_NAME%' sudah ada.
+echo.
+set /p ANSWER="Apakah ingin di-drop database? Semua data akan hilang. (Y/N): "
+IF /I "!ANSWER!" == "Y" GOTO DROP_DATABASE
+echo.
+echo [INFO] Skip drop database. Melanjutkan ke schema...
+echo.
+GOTO RUN_SCHEMA
+
+:DROP_DATABASE
+echo.
+echo [INFO] Terminating existing connections to '%DB_NAME%'...
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '%DB_NAME%' AND pid <> pg_backend_pid();" >nul 2>nul
+echo [INFO] Dropping database '%DB_NAME%'...
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "DROP DATABASE %DB_NAME%;"
+IF %ERRORLEVEL% NEQ 0 GOTO DROP_FAILED
+echo [OK] Database '%DB_NAME%' berhasil di-drop.
+echo.
+GOTO CREATE_DATABASE
+
+:DROP_FAILED
+echo [ERROR] Failed to drop database '%DB_NAME%'.
+echo Please check if there are active connections or permissions issue.
+pause
+exit /b 1
+
+:DB_NOT_EXISTS
+echo [INFO] Database '%DB_NAME%' belum ada.
+echo.
+
+:CREATE_DATABASE
+echo [INFO] Creating database '%DB_NAME%'...
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "CREATE DATABASE %DB_NAME%;"
+IF %ERRORLEVEL% NEQ 0 GOTO CREATE_FAILED
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d postgres -c "COMMENT ON DATABASE %DB_NAME% IS 'Mini Inventory Database';"
+echo [OK] Database '%DB_NAME%' berhasil dibuat.
+echo.
+GOTO RUN_SCHEMA
+
+:CREATE_FAILED
+echo [ERROR] Failed to create database '%DB_NAME%'.
+echo Please check user permissions.
+pause
+exit /b 1
+
+:RUN_SCHEMA
+
+REM ----------------------------------------------------------------------------
+REM Step 3: Execute Schema (Drop and Create Tables)
+REM ----------------------------------------------------------------------------
+echo [STEP 3/3] Executing schema script (drop and create tables)...
 echo.
 psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d %DB_NAME% -f "%SCHEMA_FILE%"
 IF %ERRORLEVEL% NEQ 0 GOTO SCHEMA_EXECUTION_FAILED
@@ -145,7 +202,7 @@ echo Verifying tables exist in schema 'public'...
 echo.
 
 SET PAGER=
-psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d %DB_NAME% -c "SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name IN ('supplier', 'warehouse', 'item_product', 'stock_inbound', 'stock_inbound_item') ORDER BY table_name;"
+psql -h %DB_HOST% -p %DB_PORT% -U %DB_USER% -d %DB_NAME% -c "SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name IN ('supplier', 'customer', 'warehouse', 'category', 'item_product', 'stock_inbound', 'stock_inbound_item', 'stock_outbound', 'stock_outbound_item', 'stock_beginning_balance') ORDER BY table_name;"
 
 echo.
 echo ============================================================================
@@ -154,10 +211,15 @@ echo ===========================================================================
 echo.
 echo Tables created in schema 'public':
 echo   - supplier
+echo   - customer
 echo   - warehouse
+echo   - category
 echo   - item_product
 echo   - stock_inbound
 echo   - stock_inbound_item
+echo   - stock_outbound
+echo   - stock_outbound_item
+echo   - stock_beginning_balance
 echo.
 echo Next steps:
 echo   1. To load seed data, run: ..\seeds\mini-inventory-seed-init.bat

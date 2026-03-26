@@ -2,10 +2,11 @@
 REM ============================================================================
 REM MINI INVENTORY DATABASE SCHEMA INITIALIZATION - MySQL 8.0+
 REM ============================================================================
-REM Version: 1.0
+REM Version: 2.0
 REM Created: 2025-02-12
-REM Description: Drop and create mini inventory schema and tables ONLY
-REM              (Does NOT load seed data - use seed-init.bat in seeds folder)
+REM Updated: 2026-03-26
+REM Description: Check/create database and initialize schema tables + triggers
+REM              Single entry point - handles database creation and schema setup
 REM Platform: Windows
 REM Prerequisites: MySQL client (mysql) must be installed and in PATH
 REM ============================================================================
@@ -37,7 +38,7 @@ REM Display Configuration
 REM ----------------------------------------------------------------------------
 echo.
 echo ============================================================================
-echo MINI INVENTORY SCHEMA INITIALIZATION - MySQL 8.0+ (Schema Only)
+echo MINI INVENTORY SCHEMA INITIALIZATION - MySQL 8.0+ (Database + Schema)
 echo ============================================================================
 echo.
 echo Database Configuration:
@@ -88,16 +89,16 @@ exit /b 1
 :MYSQL_OK
 
 REM ----------------------------------------------------------------------------
-REM Step 1: Test Database Connection
+REM Step 1: Test MySQL Server Connection
 REM ----------------------------------------------------------------------------
 echo [STEP 1/3] Testing MySQL server connection...
 mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -e "SELECT VERSION();" >nul 2>nul
-IF %ERRORLEVEL% NEQ 0 GOTO DB_CONNECTION_FAILED
+IF %ERRORLEVEL% NEQ 0 GOTO SERVER_CONNECTION_FAILED
 echo [OK] MySQL server connection successful.
 echo.
-GOTO DB_CONNECTION_OK
+GOTO SERVER_CONNECTION_OK
 
-:DB_CONNECTION_FAILED
+:SERVER_CONNECTION_FAILED
 echo [ERROR] Cannot connect to MySQL server.
 echo Please verify:
 echo   - MySQL server is running
@@ -109,25 +110,61 @@ echo   net start MySQL80
 pause
 exit /b 1
 
-:DB_CONNECTION_OK
+:SERVER_CONNECTION_OK
 
 REM ----------------------------------------------------------------------------
-REM Step 2: Create Database (if not exists)
+REM Step 2: Check & Manage Database
 REM ----------------------------------------------------------------------------
-echo [STEP 2/3] Creating database '%DB_NAME%' (if not exists)...
-mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -e "CREATE DATABASE IF NOT EXISTS %DB_NAME% CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-IF %ERRORLEVEL% NEQ 0 GOTO DB_CREATE_FAILED
-echo [OK] Database '%DB_NAME%' ready.
+echo [STEP 2/3] Checking database '%DB_NAME%'...
+
+mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% --skip-column-names -e "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '%DB_NAME%'" 2>nul | findstr /C:"%DB_NAME%" >nul 2>nul
+IF %ERRORLEVEL% EQU 0 GOTO DB_EXISTS
+GOTO DB_NOT_EXISTS
+
+:DB_EXISTS
+echo [INFO] Database '%DB_NAME%' sudah ada.
 echo.
-GOTO DB_CREATE_OK
+set /p ANSWER="Apakah ingin di-drop database? Semua data akan hilang. (Y/N): "
+IF /I "!ANSWER!" == "Y" GOTO DROP_DATABASE
+echo.
+echo [INFO] Skip drop database. Melanjutkan ke schema...
+echo.
+GOTO RUN_SCHEMA
 
-:DB_CREATE_FAILED
-echo [ERROR] Cannot create database '%DB_NAME%'.
+:DROP_DATABASE
+echo.
+echo [INFO] Dropping database '%DB_NAME%'...
+mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -e "DROP DATABASE %DB_NAME%;"
+IF %ERRORLEVEL% NEQ 0 GOTO DROP_FAILED
+echo [OK] Database '%DB_NAME%' berhasil di-drop.
+echo.
+GOTO CREATE_DATABASE
+
+:DROP_FAILED
+echo [ERROR] Failed to drop database '%DB_NAME%'.
 echo Please check permissions for user '%DB_USER%'.
 pause
 exit /b 1
 
-:DB_CREATE_OK
+:DB_NOT_EXISTS
+echo [INFO] Database '%DB_NAME%' belum ada.
+echo.
+
+:CREATE_DATABASE
+echo [INFO] Creating database '%DB_NAME%'...
+mysql -h %DB_HOST% -P %DB_PORT% -u %DB_USER% -p%DB_PASSWORD% -e "CREATE DATABASE %DB_NAME% CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+IF %ERRORLEVEL% NEQ 0 GOTO CREATE_FAILED
+echo [OK] Database '%DB_NAME%' berhasil dibuat.
+echo.
+GOTO RUN_SCHEMA
+
+:CREATE_FAILED
+echo [ERROR] Failed to create database '%DB_NAME%'.
+echo Please check permissions for user '%DB_USER%'.
+pause
+exit /b 1
+
+:RUN_SCHEMA
 
 REM ----------------------------------------------------------------------------
 REM Step 3: Execute Schema (Drop and Create Tables + Triggers)
@@ -175,11 +212,15 @@ echo ===========================================================================
 echo.
 echo Tables created in database '%DB_NAME%':
 echo   - category
+echo   - customer
 echo   - supplier
 echo   - warehouse
 echo   - item_product
 echo   - stock_inbound
 echo   - stock_inbound_item
+echo   - stock_outbound
+echo   - stock_outbound_item
+echo   - stock_beginning_balance
 echo.
 echo Triggers created (10 total):
 echo   - trg_supplier_before_insert

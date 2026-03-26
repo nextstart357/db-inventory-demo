@@ -28,15 +28,11 @@ database/
 ├── schemas/                          # Definisi schema database
 │   ├── mysql/
 │   │   ├── mini-inventory.sql        # Schema lengkap (tabel, trigger, index)
-│   │   ├── create-database.sql       # Script pembuatan database
-│   │   ├── create-database.bat       # (via schema-init.bat)
-│   │   ├── schema-init.bat           # Batch script inisialisasi schema
+│   │   ├── schema-init.bat           # Batch script inisialisasi database + schema
 │   │   └── README.md                 # Dokumentasi detail MySQL
 │   ├── postgres/
 │   │   ├── mini-inventory.sql        # Schema lengkap PostgreSQL
-│   │   ├── create-database.sql       # Script pembuatan database
-│   │   ├── create-database.bat       # Batch script pembuatan database
-│   │   └── schema-init.bat           # Batch script inisialisasi schema
+│   │   └── schema-init.bat           # Batch script inisialisasi database + schema
 │   └── oracle/
 │       ├── mini-inventory.sql        # Schema lengkap Oracle
 │       └── schema-init.bat           # Batch script inisialisasi schema
@@ -155,23 +151,10 @@ Untuk seed data PostgreSQL berbasis Python:
 ### MySQL
 
 ```bash
-# 1. Buat database
-mysql -u root -p < schemas/mysql/create-database.sql
-
-# 2. Jalankan schema
-mysql -u root -p dbinv < schemas/mysql/mini-inventory.sql
-
-# 3. Load seed data
-mysql -u root -p dbinv < seeds/mysql/mini-inventory-seed.sql
-```
-
-Atau menggunakan batch script:
-
-```bash
-# Inisialisasi schema
+# 1. Inisialisasi database + schema (cek, create/drop database, jalankan schema)
 schemas/mysql/schema-init.bat
 
-# Load seed data
+# 2. Load seed data
 seeds/mysql/seed-init.bat
 ```
 
@@ -180,13 +163,10 @@ Dokumentasi detail: [schemas/mysql/README.md](schemas/mysql/README.md) | [seeds/
 ### PostgreSQL
 
 ```bash
-# 1. Buat database
-psql -U postgres -f schemas/postgres/create-database.sql
+# 1. Inisialisasi database + schema (cek, create/drop database, jalankan schema)
+schemas/postgres/schema-init.bat
 
-# 2. Jalankan schema
-psql -U postgres -d dbinv -f schemas/postgres/mini-inventory.sql
-
-# 3. Load seed data
+# 2. Load seed data
 psql -U postgres -d dbinv -f seeds/postgres/mini-inventory-seed.sql
 ```
 
