@@ -273,7 +273,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/001', 'Pembelian laptop dan monitor untuk kantor pusat',
     2, 30.000, 170000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -310,7 +310,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/002', 'Keyboard wireless untuk seluruh staff',
     1, 50.000, 22500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -339,7 +339,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/003', 'Peralatan peripheral untuk kantor cabang Surabaya',
     3, 70.000, 100500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -383,7 +383,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/004', 'Peralatan networking untuk kantor Medan',
     2, 52.000, 40400000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -420,7 +420,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/005', 'UPS dan kabel untuk data center',
     2, 13.000, 29900000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -527,7 +527,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/001', 'Pengiriman laptop dan mouse untuk PT Pelanggan Setia',
     2, 15.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -564,7 +564,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/002', 'Pengiriman monitor tambahan',
     1, 8.000, 24000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -593,7 +593,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST002'),
     'SO/2026/003', 'Pengiriman peralatan kantor cabang Surabaya',
     3, 45.000, 58000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -637,7 +637,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/004', 'Pengiriman networking equipment ke Medan',
     2, 25.000, 23500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -674,7 +674,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/005', 'Pengiriman storage dan kabel ke Medan',
     2, 18.000, 27000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -794,30 +794,19 @@ UPDATE item_product SET stock = 5,   min_stock = 10 WHERE product_code = 'PRD-00
 -- ============================================================================
 -- STOCK BEGINNING BALANCE
 -- ============================================================================
--- Saldo awal untuk stock card processor (Contoh 1)
+-- Saldo awal seluruh item aktif di warehouse utama (WH001)
+-- qty_beginning = stock di item_product agar rekonsiliasi MATCH
 
 INSERT INTO stock_beginning_balance (item_product_id, warehouse_id, period_date, qty_beginning, notes, created_by)
-VALUES
-(
-    (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
+SELECT
+    ip.item_product_id,
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
-    '2026-01-01', 50.000, 'Saldo awal Januari 2026', 'SYSTEM'
-),
-(
-    (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
-    '2026-01-01', 30.000, 'Saldo awal Januari 2026', 'SYSTEM'
-),
-(
-    (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
-    '2026-01-01', 20.000, 'Saldo awal Januari 2026', 'SYSTEM'
-),
-(
-    (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
-    '2026-01-01', 25.000, 'Saldo awal Januari 2026 - Transit', 'SYSTEM'
-);
+    '2026-01-01',
+    ip.stock,
+    'Saldo awal Januari 2026',
+    'SYSTEM'
+FROM item_product ip
+WHERE ip.is_active = TRUE;
 
 -- ============================================================================
 -- STOCK INBOUND - TRANSAKSI JANUARI-MARET 2026
@@ -837,7 +826,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/008', 'Penerimaan laptop dan monitor batch pertama',
     3, 75.000, 180000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -880,7 +869,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/009', 'Tambahan stok laptop',
     1, 25.000, 300000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -908,7 +897,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/010', 'Restok laptop Maret',
     1, 20.000, 240000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -936,7 +925,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/011', 'Stok untuk gudang transit Surabaya',
     2, 45.000, 60000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -972,7 +961,7 @@ INSERT INTO stock_inbound (
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/012', 'Inbound yang stoknya sudah sebagian keluar',
     2, 35.000, 50000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_inbound_item (
@@ -1083,7 +1072,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/008', 'Pengiriman ke PT Pelanggan Setia',
     2, 25.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -1119,7 +1108,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST002'),
     'SO/2026/009', 'Pengiriman ke CV Toko Makmur',
     1, 10.000, 150000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (
@@ -1147,7 +1136,7 @@ INSERT INTO stock_outbound (
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/010', 'Pengiriman ke PT Retail Nusantara',
     2, 40.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 );
 
 INSERT INTO stock_outbound_item (

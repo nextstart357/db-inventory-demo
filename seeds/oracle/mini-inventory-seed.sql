@@ -393,7 +393,7 @@ SELECT
     s.supplier_id,
     'PO/2026/001', 'Pembelian laptop dan monitor untuk kantor pusat',
     2, 30.000, 170000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP001';
 
@@ -438,7 +438,7 @@ SELECT
     s.supplier_id,
     'PO/2026/002', 'Keyboard wireless untuk seluruh staff',
     1, 50.000, 22500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP001';
 
@@ -471,7 +471,7 @@ SELECT
     s.supplier_id,
     'PO/2026/003', 'Peralatan peripheral untuk kantor cabang Surabaya',
     3, 70.000, 100500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH002' AND s.supplier_code = 'SUP002';
 
@@ -528,7 +528,7 @@ SELECT
     s.supplier_id,
     'PO/2026/004', 'Peralatan networking untuk kantor Medan',
     2, 52.000, 40400000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH003' AND s.supplier_code = 'SUP003';
 
@@ -573,7 +573,7 @@ SELECT
     s.supplier_id,
     'PO/2026/005', 'UPS dan kabel untuk data center',
     2, 13.000, 29900000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP003';
 
@@ -700,7 +700,7 @@ SELECT
     c.customer_id,
     'SO/2026/001', 'Pengiriman laptop dan mouse untuk PT Pelanggan Setia',
     2, 15.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST001';
 
@@ -745,7 +745,7 @@ SELECT
     c.customer_id,
     'SO/2026/002', 'Pengiriman monitor tambahan',
     1, 8.000, 24000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST001';
 
@@ -778,7 +778,7 @@ SELECT
     c.customer_id,
     'SO/2026/003', 'Pengiriman peralatan kantor cabang Surabaya',
     3, 45.000, 58000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH002' AND c.customer_code = 'CST002';
 
@@ -835,7 +835,7 @@ SELECT
     c.customer_id,
     'SO/2026/004', 'Pengiriman networking equipment ke Medan',
     2, 25.000, 23500000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH003' AND c.customer_code = 'CST003';
 
@@ -880,7 +880,7 @@ SELECT
     c.customer_id,
     'SO/2026/005', 'Pengiriman storage dan kabel ke Medan',
     2, 18.000, 27000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST003';
 
@@ -1021,27 +1021,20 @@ COMMIT;
 -- ============================================================================
 -- STOCK BEGINNING BALANCE
 -- ============================================================================
--- Saldo awal untuk stock card processor (Contoh 1)
+-- Saldo awal seluruh item aktif di warehouse utama (WH001)
+-- qty_beginning = stock di item_product agar rekonsiliasi MATCH
 
 INSERT INTO stock_beginning_balance (item_product_id, warehouse_id, period_date, qty_beginning, notes, created_by)
-SELECT ip.item_product_id, w.warehouse_id, TO_DATE('2026-01-01', 'YYYY-MM-DD'), 50.000, 'Saldo awal Januari 2026', 'SYSTEM'
+SELECT
+    ip.item_product_id,
+    w.warehouse_id,
+    TO_DATE('2026-01-01', 'YYYY-MM-DD'),
+    ip.stock,
+    'Saldo awal Januari 2026',
+    'SYSTEM'
 FROM item_product ip, warehouse w
-WHERE ip.product_code = 'PRD-0001' AND w.warehouse_code = 'WH001';
-
-INSERT INTO stock_beginning_balance (item_product_id, warehouse_id, period_date, qty_beginning, notes, created_by)
-SELECT ip.item_product_id, w.warehouse_id, TO_DATE('2026-01-01', 'YYYY-MM-DD'), 30.000, 'Saldo awal Januari 2026', 'SYSTEM'
-FROM item_product ip, warehouse w
-WHERE ip.product_code = 'PRD-0007' AND w.warehouse_code = 'WH001';
-
-INSERT INTO stock_beginning_balance (item_product_id, warehouse_id, period_date, qty_beginning, notes, created_by)
-SELECT ip.item_product_id, w.warehouse_id, TO_DATE('2026-01-01', 'YYYY-MM-DD'), 20.000, 'Saldo awal Januari 2026', 'SYSTEM'
-FROM item_product ip, warehouse w
-WHERE ip.product_code = 'PRD-0013' AND w.warehouse_code = 'WH001';
-
-INSERT INTO stock_beginning_balance (item_product_id, warehouse_id, period_date, qty_beginning, notes, created_by)
-SELECT ip.item_product_id, w.warehouse_id, TO_DATE('2026-01-01', 'YYYY-MM-DD'), 25.000, 'Saldo awal Januari 2026 - Transit', 'SYSTEM'
-FROM item_product ip, warehouse w
-WHERE ip.product_code = 'PRD-0001' AND w.warehouse_code = 'WH002';
+WHERE ip.is_active = 1
+  AND w.warehouse_code = 'WH001';
 
 COMMIT;
 
@@ -1063,7 +1056,7 @@ SELECT
     w.warehouse_id, s.supplier_id,
     'PO/2026/008', 'Penerimaan laptop dan monitor batch pertama',
     3, 75.000, 180000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP001';
 
@@ -1113,7 +1106,7 @@ SELECT
     w.warehouse_id, s.supplier_id,
     'PO/2026/009', 'Tambahan stok laptop',
     1, 25.000, 300000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP002';
 
@@ -1143,7 +1136,7 @@ SELECT
     w.warehouse_id, s.supplier_id,
     'PO/2026/010', 'Restok laptop Maret',
     1, 20.000, 240000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP001';
 
@@ -1173,7 +1166,7 @@ SELECT
     w.warehouse_id, s.supplier_id,
     'PO/2026/011', 'Stok untuk gudang transit Surabaya',
     2, 45.000, 60000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH002' AND s.supplier_code = 'SUP003';
 
@@ -1213,7 +1206,7 @@ SELECT
     w.warehouse_id, s.supplier_id,
     'PO/2026/012', 'Inbound yang stoknya sudah sebagian keluar',
     2, 35.000, 50000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, supplier s
 WHERE w.warehouse_code = 'WH001' AND s.supplier_code = 'SUP001';
 
@@ -1337,7 +1330,7 @@ SELECT
     w.warehouse_id, c.customer_id,
     'SO/2026/008', 'Pengiriman ke PT Pelanggan Setia',
     2, 25.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST001';
 
@@ -1377,7 +1370,7 @@ SELECT
     w.warehouse_id, c.customer_id,
     'SO/2026/009', 'Pengiriman ke CV Toko Makmur',
     1, 10.000, 150000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST002';
 
@@ -1407,7 +1400,7 @@ SELECT
     w.warehouse_id, c.customer_id,
     'SO/2026/010', 'Pengiriman ke PT Retail Nusantara',
     2, 40.000, 90000000.00,
-    'confirmed', 'SYSTEM'
+    'draft', 'SYSTEM'
 FROM warehouse w, customer c
 WHERE w.warehouse_code = 'WH001' AND c.customer_code = 'CST003';
 
