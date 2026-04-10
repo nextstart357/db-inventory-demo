@@ -14,40 +14,40 @@
 -- SAMPLE DATA - CATEGORIES
 -- ============================================================================
 
-INSERT INTO category (category_code, category_name, description, created_by) VALUES
-('CAT001', 'Elektronik', 'Produk elektronik dan gadget seperti smartphone, laptop, tablet, dll', 'SYSTEM'),
-('CAT002', 'Fashion', 'Produk pakaian dan aksesoris fashion', 'SYSTEM'),
-('CAT003', 'Makanan', 'Produk makanan dan minuman', 'SYSTEM'),
-('CAT004', 'Kesehatan', 'Produk kesehatan, vitamin, dan perawatan tubuh', 'SYSTEM'),
-('CAT005', 'Rumah Tangga', 'Produk peralatan rumah tangga dan dapur', 'SYSTEM'),
-('CAT006', 'Olahraga', 'Produk perlengkapan olahraga dan fitness', 'SYSTEM');
+INSERT INTO category (category_id, category_code, category_name, description, created_by) VALUES
+('a1000000-0000-4000-8000-000000000001', 'CAT001', 'Elektronik', 'Produk elektronik dan gadget seperti smartphone, laptop, tablet, dll', 'SYSTEM'),
+('a1000000-0000-4000-8000-000000000002', 'CAT002', 'Fashion', 'Produk pakaian dan aksesoris fashion', 'SYSTEM'),
+('a1000000-0000-4000-8000-000000000003', 'CAT003', 'Makanan', 'Produk makanan dan minuman', 'SYSTEM'),
+('a1000000-0000-4000-8000-000000000004', 'CAT004', 'Kesehatan', 'Produk kesehatan, vitamin, dan perawatan tubuh', 'SYSTEM'),
+('a1000000-0000-4000-8000-000000000005', 'CAT005', 'Rumah Tangga', 'Produk peralatan rumah tangga dan dapur', 'SYSTEM'),
+('a1000000-0000-4000-8000-000000000006', 'CAT006', 'Olahraga', 'Produk perlengkapan olahraga dan fitness', 'SYSTEM');
 
 -- ============================================================================
 -- SAMPLE DATA - CUSTOMERS
 -- ============================================================================
 
-INSERT INTO customer (customer_code, customer_name, contact_person, phone, email, city, register_date, amount_receivable, created_by) VALUES
-('CST001', 'PT Pelanggan Setia', 'Ahmad Rizki', '021-11223344', 'ahmad@pelanggansetia.com', 'Jakarta', '2024-02-10', 12000000.00, 'SYSTEM'),
-('CST002', 'CV Toko Makmur', 'Siti Rahayu', '031-55667788', 'siti@tokomakmur.com', 'Surabaya', '2024-04-15', 5500000.00, 'SYSTEM'),
-('CST003', 'PT Retail Nusantara', 'Budi Santoso', '061-99887766', 'budi@retailnusantara.com', 'Medan', '2024-07-20', 18000000.00, 'SYSTEM');
+INSERT INTO customer (customer_id, customer_code, customer_name, contact_person, phone, email, city, register_date, amount_receivable, created_by) VALUES
+('c1000000-0000-4000-8000-000000000001', 'CST001', 'PT Pelanggan Setia', 'Ahmad Rizki', '021-11223344', 'ahmad@pelanggansetia.com', 'Jakarta', '2024-02-10', 12000000.00, 'SYSTEM'),
+('c1000000-0000-4000-8000-000000000002', 'CST002', 'CV Toko Makmur', 'Siti Rahayu', '031-55667788', 'siti@tokomakmur.com', 'Surabaya', '2024-04-15', 5500000.00, 'SYSTEM'),
+('c1000000-0000-4000-8000-000000000003', 'CST003', 'PT Retail Nusantara', 'Budi Santoso', '061-99887766', 'budi@retailnusantara.com', 'Medan', '2024-07-20', 18000000.00, 'SYSTEM');
 
 -- ============================================================================
 -- SAMPLE DATA - SUPPLIERS
 -- ============================================================================
 
-INSERT INTO supplier (supplier_code, supplier_name, contact_person, phone, email, city, register_date, amount_payable, created_by) VALUES
-('SUP001', 'PT Supplier Utama', 'John Doe', '021-12345678', 'john@supplier1.com', 'Jakarta', '2024-01-15', 15000000.00, 'SYSTEM'),
-('SUP002', 'CV Mitra Sejahtera', 'Jane Smith', '021-87654321', 'jane@mitra.com', 'Bandung', '2024-03-20', 8500000.00, 'SYSTEM'),
-('SUP003', 'PT Global Teknologi', 'Michael Chen', '021-55667788', 'michael@globaltek.com', 'Jakarta', '2024-06-10', 25000000.00, 'SYSTEM');
+INSERT INTO supplier (supplier_id, supplier_code, supplier_name, contact_person, phone, email, city, register_date, amount_payable, created_by) VALUES
+('b1000000-0000-4000-8000-000000000001', 'SUP001', 'PT Supplier Utama', 'John Doe', '021-12345678', 'john@supplier1.com', 'Jakarta', '2024-01-15', 15000000.00, 'SYSTEM'),
+('b1000000-0000-4000-8000-000000000002', 'SUP002', 'CV Mitra Sejahtera', 'Jane Smith', '021-87654321', 'jane@mitra.com', 'Bandung', '2024-03-20', 8500000.00, 'SYSTEM'),
+('b1000000-0000-4000-8000-000000000003', 'SUP003', 'PT Global Teknologi', 'Michael Chen', '021-55667788', 'michael@globaltek.com', 'Jakarta', '2024-06-10', 25000000.00, 'SYSTEM');
 
 -- ============================================================================
 -- SAMPLE DATA - WAREHOUSES
 -- ============================================================================
 
-INSERT INTO warehouse (warehouse_code, warehouse_name, warehouse_type, city, capacity, created_by) VALUES
-('WH001', 'Gudang Pusat Jakarta', 'main', 'Jakarta', 1000.00, 'SYSTEM'),
-('WH002', 'Gudang Transit Surabaya', 'transit', 'Surabaya', 500.00, 'SYSTEM'),
-('WH003', 'Gudang Konsinyasi Medan', 'consignment', 'Medan', 300.00, 'SYSTEM');
+INSERT INTO warehouse (warehouse_id, warehouse_code, warehouse_name, warehouse_type, city, capacity, created_by) VALUES
+('d1000000-0000-4000-8000-000000000001', 'WH001', 'Gudang Pusat Jakarta', 'main', 'Jakarta', 1000.00, 'SYSTEM'),
+('d1000000-0000-4000-8000-000000000002', 'WH002', 'Gudang Transit Surabaya', 'transit', 'Surabaya', 500.00, 'SYSTEM'),
+('d1000000-0000-4000-8000-000000000003', 'WH003', 'Gudang Konsinyasi Medan', 'consignment', 'Medan', 300.00, 'SYSTEM');
 
 -- ============================================================================
 -- SAMPLE DATA - ITEM PRODUCTS (600 Products)
@@ -55,6 +55,7 @@ INSERT INTO warehouse (warehouse_code, warehouse_name, warehouse_type, city, cap
 -- Using recursive CTE for efficient bulk insert (MySQL 8.0+)
 
 INSERT INTO item_product (
+    item_product_id,
     product_code, sku, product_name, category_id, brand, description,
     purchase_price, selling_price, stock, min_stock, uom, weight,
     is_active, show_in_store, barcode, shelf_location, notes, created_by
@@ -67,21 +68,24 @@ WITH RECURSIVE numbers AS (
 product_data AS (
     SELECT
         n,
+        -- Item Product ID: deterministic hardcoded UUID (e1 prefix + 12-digit zero-padded n)
+        CONCAT('e1000000-0000-4000-8000-', LPAD(n, 12, '0')) AS item_product_id,
         -- Product Code: PRD-0001 to PRD-0600
         CONCAT('PRD-', LPAD(n, 4, '0')) AS product_code,
         -- SKU: SKU + 10 digit
         CONCAT('SKU', LPAD(n, 10, '0')) AS sku,
-        -- Category index (0-5)
-        (n - 1) MOD 6 AS cat_idx,
-        -- Product index within category
-        FLOOR((n - 1) / 6) MOD 20 AS prod_idx,
-        -- Brand index
-        FLOOR((n - 1) / 6) MOD 20 AS brand_idx,
-        -- Variant index
-        FLOOR((n - 1) / 120) AS variant_idx
+        -- Category index (0-5) - matches PostgreSQL (n % 6)
+        n MOD 6 AS cat_idx,
+        -- Product index within category - matches PostgreSQL ((n / 6) % 20)
+        FLOOR(n / 6) MOD 20 AS prod_idx,
+        -- Brand index - matches PostgreSQL ((n / 6) % 20)
+        FLOOR(n / 6) MOD 20 AS brand_idx,
+        -- Variant index - matches PostgreSQL (n / 120)
+        FLOOR(n / 120) AS variant_idx
     FROM numbers
 )
 SELECT
+    item_product_id,
     product_code,
     sku,
     -- Product Name based on category
@@ -218,7 +222,7 @@ SELECT
     (5 + (n MOD 46)) AS min_stock,
     -- UOM
     CASE
-        WHEN cat_idx = 2 THEN ELT(((n / 6) MOD 5) + 1, 'pcs', 'box', 'pack', 'kg', 'liter')
+        WHEN cat_idx = 2 THEN ELT((FLOOR(n / 6) MOD 5) + 1, 'pcs', 'box', 'pack', 'kg', 'liter')
         ELSE 'pcs'
     END AS uom,
     -- Weight in grams
@@ -272,7 +276,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/001', 'Pembelian laptop dan monitor untuk kantor pusat',
-    2, 30.000, 170000000.00,
+    2, 30, 170000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -285,14 +289,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/001'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    10.000, 'pcs', 12000000.00, 120000000.00,
+    10, 'pcs', 12000000.00, 120000000.00,
     'Laptop untuk tim development', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/001'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    20.000, 'pcs', 2500000.00, 50000000.00,
+    20, 'pcs', 2500000.00, 50000000.00,
     'Monitor untuk workstation', 'SYSTEM'
 );
 
@@ -309,7 +313,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/002', 'Keyboard wireless untuk seluruh staff',
-    1, 50.000, 22500000.00,
+    1, 50, 22500000.00,
     'draft', 'SYSTEM'
 );
 
@@ -321,7 +325,7 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/002'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    50.000, 'pcs', 450000.00, 22500000.00,
+    50, 'pcs', 450000.00, 22500000.00,
     'Keyboard untuk replacement', 'SYSTEM'
 );
 
@@ -338,7 +342,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/003', 'Peralatan peripheral untuk kantor cabang Surabaya',
-    3, 70.000, 100500000.00,
+    3, 70, 100500000.00,
     'draft', 'SYSTEM'
 );
 
@@ -351,21 +355,21 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/003'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0019'),
-    30.000, 'pcs', 1200000.00, 36000000.00,
+    30, 'pcs', 1200000.00, 36000000.00,
     'Mouse ergonomic untuk designer', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/003'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0025'),
-    25.000, 'pcs', 1500000.00, 37500000.00,
+    25, 'pcs', 1500000.00, 37500000.00,
     'Webcam untuk meeting room', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/003'),
     3,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0031'),
-    15.000, 'pcs', 1800000.00, 27000000.00,
+    15, 'pcs', 1800000.00, 27000000.00,
     'Headset untuk customer service', 'SYSTEM'
 );
 
@@ -382,7 +386,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH003'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/004', 'Peralatan networking untuk kantor Medan',
-    2, 52.000, 40400000.00,
+    2, 52, 40400000.00,
     'draft', 'SYSTEM'
 );
 
@@ -395,14 +399,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/004'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0037'),
-    40.000, 'pcs', 650000.00, 26000000.00,
+    40, 'pcs', 650000.00, 26000000.00,
     'Router untuk setiap lantai', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/004'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0043'),
-    12.000, 'pcs', 1200000.00, 14400000.00,
+    12, 'pcs', 1200000.00, 14400000.00,
     'Switch untuk server room', 'SYSTEM'
 );
 
@@ -419,7 +423,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/005', 'UPS dan kabel untuk data center',
-    2, 13.000, 29900000.00,
+    2, 13, 29900000.00,
     'draft', 'SYSTEM'
 );
 
@@ -432,14 +436,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/005'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0049'),
-    8.000, 'pcs', 2800000.00, 22400000.00,
+    8, 'pcs', 2800000.00, 22400000.00,
     'UPS untuk server rack', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/005'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0055'),
-    5.000, 'box', 1500000.00, 7500000.00,
+    5, 'box', 1500000.00, 7500000.00,
     'Kabel Cat6 untuk instalasi baru', 'SYSTEM'
 );
 
@@ -456,7 +460,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/006', 'Pembelian laptop tambahan - belum dikonfirmasi',
-    2, 15.000, 85000000.00,
+    2, 15, 85000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -469,14 +473,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/006'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    5.000, 'pcs', 12000000.00, 60000000.00,
+    5, 'pcs', 12000000.00, 60000000.00,
     'Laptop untuk tim baru', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/006'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    10.000, 'pcs', 2500000.00, 25000000.00,
+    10, 'pcs', 2500000.00, 25000000.00,
     'Monitor untuk workstation baru', 'SYSTEM'
 );
 
@@ -493,7 +497,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/007', 'Webcam tambahan - menunggu approval',
-    1, 10.000, 15000000.00,
+    1, 10, 15000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -505,7 +509,7 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/007'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0025'),
-    10.000, 'pcs', 1500000.00, 15000000.00,
+    10, 'pcs', 1500000.00, 15000000.00,
     'Webcam untuk ekspansi meeting room', 'SYSTEM'
 );
 
@@ -526,7 +530,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/001', 'Pengiriman laptop dan mouse untuk PT Pelanggan Setia',
-    2, 15.000, 90000000.00,
+    2, 15, 90000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -539,14 +543,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/001'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    5.000, 'pcs', 15000000.00, 75000000.00,
+    5, 'pcs', 15000000.00, 75000000.00,
     'Laptop untuk kantor pusat client', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/001'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0019'),
-    10.000, 'pcs', 1500000.00, 15000000.00,
+    10, 'pcs', 1500000.00, 15000000.00,
     'Mouse wireless untuk staff client', 'SYSTEM'
 );
 
@@ -563,7 +567,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/002', 'Pengiriman monitor tambahan',
-    1, 8.000, 24000000.00,
+    1, 8, 24000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -575,7 +579,7 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/002'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    8.000, 'pcs', 3000000.00, 24000000.00,
+    8, 'pcs', 3000000.00, 24000000.00,
     'Monitor LED untuk workstation client', 'SYSTEM'
 );
 
@@ -592,7 +596,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST002'),
     'SO/2026/003', 'Pengiriman peralatan kantor cabang Surabaya',
-    3, 45.000, 58000000.00,
+    3, 45, 58000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -605,21 +609,21 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/003'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    20.000, 'pcs', 550000.00, 11000000.00,
+    20, 'pcs', 550000.00, 11000000.00,
     'Keyboard untuk seluruh staff', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/003'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0025'),
-    15.000, 'pcs', 1800000.00, 27000000.00,
+    15, 'pcs', 1800000.00, 27000000.00,
     'Webcam untuk meeting room', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/003'),
     3,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0031'),
-    10.000, 'pcs', 2000000.00, 20000000.00,
+    10, 'pcs', 2000000.00, 20000000.00,
     'Headphone untuk customer service', 'SYSTEM'
 );
 
@@ -636,7 +640,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH003'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/004', 'Pengiriman networking equipment ke Medan',
-    2, 25.000, 23500000.00,
+    2, 25, 23500000.00,
     'draft', 'SYSTEM'
 );
 
@@ -649,14 +653,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/004'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0037'),
-    20.000, 'pcs', 800000.00, 16000000.00,
+    20, 'pcs', 800000.00, 16000000.00,
     'Router untuk setiap lantai gedung', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/004'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0043'),
-    5.000, 'pcs', 1500000.00, 7500000.00,
+    5, 'pcs', 1500000.00, 7500000.00,
     'Switch managed untuk server room', 'SYSTEM'
 );
 
@@ -673,7 +677,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/005', 'Pengiriman storage dan kabel ke Medan',
-    2, 18.000, 27000000.00,
+    2, 18, 27000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -686,14 +690,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/005'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0049'),
-    3.000, 'pcs', 3500000.00, 10500000.00,
+    3, 'pcs', 3500000.00, 10500000.00,
     'UPS untuk server rack client', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/005'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0055'),
-    15.000, 'box', 1100000.00, 16500000.00,
+    15, 'box', 1100000.00, 16500000.00,
     'Kabel Cat6 untuk instalasi gedung baru', 'SYSTEM'
 );
 
@@ -710,7 +714,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/006', 'Pengiriman tablet dan charger - belum dikonfirmasi',
-    2, 22.000, 42000000.00,
+    2, 22, 42000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -723,14 +727,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/006'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    2.000, 'pcs', 15000000.00, 30000000.00,
+    2, 'pcs', 15000000.00, 30000000.00,
     'Laptop untuk tim marketing client', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/006'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    20.000, 'pcs', 600000.00, 12000000.00,
+    20, 'pcs', 600000.00, 12000000.00,
     'Keyboard untuk replacement', 'SYSTEM'
 );
 
@@ -747,7 +751,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST002'),
     'SO/2026/007', 'Pengiriman speaker - menunggu approval',
-    1, 12.000, 21600000.00,
+    1, 12, 21600000.00,
     'draft', 'SYSTEM'
 );
 
@@ -759,7 +763,7 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/007'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0025'),
-    12.000, 'pcs', 1800000.00, 21600000.00,
+    12, 'pcs', 1800000.00, 21600000.00,
     'Webcam untuk ekspansi meeting room client', 'SYSTEM'
 );
 
@@ -806,7 +810,7 @@ SELECT
     'Saldo awal Januari 2026',
     'SYSTEM'
 FROM item_product ip
-WHERE ip.is_active = TRUE;
+WHERE ip.is_active = 'true';
 
 -- ============================================================================
 -- STOCK INBOUND - TRANSAKSI JANUARI-MARET 2026
@@ -825,7 +829,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/008', 'Penerimaan laptop dan monitor batch pertama',
-    3, 75.000, 180000000.00,
+    3, 75, 180000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -837,21 +841,21 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/008'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    30.000, 'pcs', 12000000.00, 360000000.00,
+    30, 'pcs', 12000000.00, 360000000.00,
     'Laptop batch 1', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/008'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    25.000, 'pcs', 2500000.00, 62500000.00,
+    25, 'pcs', 2500000.00, 62500000.00,
     'Monitor batch 1', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/008'),
     3,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    20.000, 'pcs', 450000.00, 9000000.00,
+    20, 'pcs', 450000.00, 9000000.00,
     'Keyboard batch 1', 'SYSTEM'
 );
 
@@ -868,7 +872,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/009', 'Tambahan stok laptop',
-    1, 25.000, 300000000.00,
+    1, 25, 300000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -879,7 +883,7 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/009'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    25.000, 'pcs', 12000000.00, 300000000.00,
+    25, 'pcs', 12000000.00, 300000000.00,
     'Laptop tambahan', 'SYSTEM'
 );
 
@@ -896,7 +900,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/010', 'Restok laptop Maret',
-    1, 20.000, 240000000.00,
+    1, 20, 240000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -907,7 +911,7 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/010'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    20.000, 'pcs', 12000000.00, 240000000.00,
+    20, 'pcs', 12000000.00, 240000000.00,
     'Laptop restok Maret', 'SYSTEM'
 );
 
@@ -924,7 +928,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP003'),
     'PO/2026/011', 'Stok untuk gudang transit Surabaya',
-    2, 45.000, 60000000.00,
+    2, 45, 60000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -936,14 +940,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/011'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    15.000, 'pcs', 12000000.00, 180000000.00,
+    15, 'pcs', 12000000.00, 180000000.00,
     'Laptop untuk cabang Surabaya', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/011'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0019'),
-    30.000, 'pcs', 1200000.00, 36000000.00,
+    30, 'pcs', 1200000.00, 36000000.00,
     'Mouse untuk cabang Surabaya', 'SYSTEM'
 );
 
@@ -960,7 +964,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/012', 'Inbound yang stoknya sudah sebagian keluar',
-    2, 35.000, 50000000.00,
+    2, 35, 50000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -972,14 +976,14 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/012'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0055'),
-    20.000, 'pcs', 1500000.00, 30000000.00,
+    20, 'pcs', 1500000.00, 30000000.00,
     'Kabel yang sebagian sudah dikirim', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/012'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0025'),
-    15.000, 'pcs', 1500000.00, 22500000.00,
+    15, 'pcs', 1500000.00, 22500000.00,
     'Webcam batch tambahan', 'SYSTEM'
 );
 
@@ -996,7 +1000,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP001'),
     'PO/2026/013', 'Penerimaan barang baru - menunggu konfirmasi',
-    3, 55.000, 85000000.00,
+    3, 55, 85000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1008,21 +1012,21 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/013'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    20.000, 'pcs', 12000000.00, 240000000.00,
+    20, 'pcs', 12000000.00, 240000000.00,
     'Laptop untuk tim engineering', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/013'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    15.000, 'pcs', 2500000.00, 37500000.00,
+    15, 'pcs', 2500000.00, 37500000.00,
     'Monitor untuk workstation baru', 'SYSTEM'
 ),
 (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/013'),
     3,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    20.000, 'pcs', 450000.00, 9000000.00,
+    20, 'pcs', 450000.00, 9000000.00,
     'Keyboard mechanical', 'SYSTEM'
 );
 
@@ -1039,7 +1043,7 @@ INSERT INTO stock_inbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH002'),
     (SELECT supplier_id FROM supplier WHERE supplier_code = 'SUP002'),
     'PO/2026/014', 'Stok mouse untuk transit - belum dikonfirmasi',
-    1, 40.000, 48000000.00,
+    1, 40, 48000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1050,7 +1054,7 @@ INSERT INTO stock_inbound_item (
     (SELECT stock_inbound_id FROM stock_inbound WHERE inbound_number = 'INB/2026/014'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0019'),
-    40.000, 'pcs', 1200000.00, 48000000.00,
+    40, 'pcs', 1200000.00, 48000000.00,
     'Mouse ergonomic untuk cabang', 'SYSTEM'
 );
 
@@ -1071,7 +1075,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/008', 'Pengiriman ke PT Pelanggan Setia',
-    2, 25.000, 90000000.00,
+    2, 25, 90000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1083,14 +1087,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/008'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    15.000, 'pcs', 15000000.00, 225000000.00,
+    15, 'pcs', 15000000.00, 225000000.00,
     'Laptop untuk kantor pusat client', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/008'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0007'),
-    10.000, 'pcs', 3000000.00, 30000000.00,
+    10, 'pcs', 3000000.00, 30000000.00,
     'Monitor untuk client', 'SYSTEM'
 );
 
@@ -1107,7 +1111,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST002'),
     'SO/2026/009', 'Pengiriman ke CV Toko Makmur',
-    1, 10.000, 150000000.00,
+    1, 10, 150000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1118,7 +1122,7 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/009'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    10.000, 'pcs', 15000000.00, 150000000.00,
+    10, 'pcs', 15000000.00, 150000000.00,
     'Laptop batch kedua', 'SYSTEM'
 );
 
@@ -1135,7 +1139,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST003'),
     'SO/2026/010', 'Pengiriman ke PT Retail Nusantara',
-    2, 40.000, 90000000.00,
+    2, 40, 90000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1147,14 +1151,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/010'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    35.000, 'pcs', 15000000.00, 525000000.00,
+    35, 'pcs', 15000000.00, 525000000.00,
     'Laptop untuk ekspansi kantor', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/010'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0013'),
-    5.000, 'pcs', 550000.00, 2750000.00,
+    5, 'pcs', 550000.00, 2750000.00,
     'Keyboard untuk staff baru', 'SYSTEM'
 );
 
@@ -1171,7 +1175,7 @@ INSERT INTO stock_outbound (
     (SELECT warehouse_id FROM warehouse WHERE warehouse_code = 'WH001'),
     (SELECT customer_id FROM customer WHERE customer_code = 'CST001'),
     'SO/2026/011', 'Pengiriman menunggu konfirmasi',
-    2, 12.000, 42000000.00,
+    2, 12, 42000000.00,
     'draft', 'SYSTEM'
 );
 
@@ -1183,14 +1187,14 @@ INSERT INTO stock_outbound_item (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/011'),
     1,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0001'),
-    5.000, 'pcs', 15000000.00, 75000000.00,
+    5, 'pcs', 15000000.00, 75000000.00,
     'Laptop untuk client', 'SYSTEM'
 ),
 (
     (SELECT stock_outbound_id FROM stock_outbound WHERE outbound_number = 'OUT/2026/011'),
     2,
     (SELECT item_product_id FROM item_product WHERE product_code = 'PRD-0019'),
-    7.000, 'pcs', 1500000.00, 10500000.00,
+    7, 'pcs', 1500000.00, 10500000.00,
     'Mouse untuk client', 'SYSTEM'
 );
 

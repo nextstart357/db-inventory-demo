@@ -148,8 +148,12 @@ def lookup_products(conn, product_codes):
 # =============================================================================
 
 def product_id(n):
-    """Deterministic item_product_id for product number n (1-600)."""
-    return str(uuid.uuid5(NS_ITEM_PRODUCT, f'PRD-{n:04d}'))
+    """Deterministic item_product_id for product number n (1-600).
+
+    Format matches mini-inventory-seed.sql: hardcoded UUID with e1 prefix
+    and 12-digit zero-padded n. Identical across PostgreSQL/MySQL/Oracle.
+    """
+    return f'e1000000-0000-4000-8000-{n:012d}'
 
 
 def selling_price(n):
@@ -325,7 +329,7 @@ def generate(args, output, fixed_products=None):
             f"    '{outbound_id}', '{outbound_number}', '{outbound_date}',\n"
             f"    '{warehouse_id}', '{customer_id}',\n"
             f"    '{ref_number}', 'Generated outbound #{i}',\n"
-            f"    {num_items}, {sum_qty:.3f}, {sum_amount:.2f},\n"
+            f"    {num_items}, {sum_qty}, {sum_amount:.2f},\n"
             f"    '{status}', 'GENERATOR'\n"
             f");\n"
         )
@@ -342,7 +346,7 @@ def generate(args, output, fixed_products=None):
             comma = ',' if j < len(items) - 1 else ';'
             output.write(
                 f"(   '{it['id']}', '{outbound_id}', {it['line']},\n"
-                f"    '{it['product_id']}', {it['qty']:.3f}, '{it['uom']}',\n"
+                f"    '{it['product_id']}', {it['qty']}, '{it['uom']}',\n"
                 f"    {it['price']:.2f}, {it['amount']:.2f},\n"
                 f"    '{it['product_code']}', 'GENERATOR'\n"
                 f"){comma}\n"
