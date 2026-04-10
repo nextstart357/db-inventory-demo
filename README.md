@@ -28,8 +28,7 @@ database/
 ├── schemas/                          # Definisi schema database
 │   ├── mysql/
 │   │   ├── mini-inventory.sql        # Schema lengkap (tabel, trigger, index)
-│   │   ├── schema-init.bat           # Batch script inisialisasi database + schema
-│   │   └── README.md                 # Dokumentasi detail MySQL
+│   │   └── schema-init.bat           # Batch script inisialisasi database + schema
 │   ├── postgres/
 │   │   ├── mini-inventory.sql        # Schema lengkap PostgreSQL
 │   │   └── schema-init.bat           # Batch script inisialisasi database + schema
@@ -40,8 +39,7 @@ database/
 ├── seeds/                            # Sample data untuk testing & development
 │   ├── mysql/
 │   │   ├── mini-inventory-seed.sql   # Seed data (recursive CTE, 1000 produk)
-│   │   ├── seed-init.bat             # Batch script load seed data
-│   │   └── README.md                 # Dokumentasi detail seed MySQL
+│   │   └── seed-init.bat             # Batch script load seed data
 │   ├── postgres/
 │   │   ├── mini-inventory-seed.sql   # Seed data dasar
 │   │   ├── seed-inbound.py           # Generator transaksi inbound (Python)
@@ -158,8 +156,6 @@ schemas/mysql/schema-init.bat
 seeds/mysql/seed-init.bat
 ```
 
-Dokumentasi detail: [schemas/mysql/README.md](schemas/mysql/README.md) | [seeds/mysql/README.md](seeds/mysql/README.md)
-
 ### PostgreSQL
 
 ```bash
@@ -196,23 +192,11 @@ sqlplus username/password@service @seeds/oracle/mini-inventory-seed.sql
 
 Seed data menyediakan sample data untuk testing dan development:
 
-| Tabel | Jumlah Record | Keterangan |
-|-------|---------------|------------|
-| `category` | 6 | Elektronik, Fashion, Makanan, Kesehatan, Rumah Tangga, Olahraga |
-| `supplier` | 3 | PT Supplier Utama, CV Mitra Sejahtera, PT Global Teknologi |
-| `customer` | 3 | PT Pelanggan Setia, CV Toko Makmur, PT Retail Nusantara |
-| `warehouse` | 3 | Jakarta (main), Surabaya (transit), Medan (consignment) |
-| `item_product` | 600–1000 | Produk dari berbagai kategori (jumlah bervariasi per platform) |
-| `stock_inbound` | 7 | 5 confirmed, 2 draft |
-| `stock_inbound_item` | 13 | Detail item dari 7 transaksi |
-
 Teknik generate data per platform:
 
 - **MySQL**: Recursive CTE untuk bulk insert 1000 produk dalam satu query
 - **PostgreSQL**: Python script dengan UUID deterministic (`uuid5`) untuk reproducible data
 - **Oracle**: PL/SQL block untuk bulk product generation
-
-Dokumentasi detail seed data: [seeds/mysql/README.md](seeds/mysql/README.md)
 
 ## Perbandingan Platform (Platform Comparison)
 
